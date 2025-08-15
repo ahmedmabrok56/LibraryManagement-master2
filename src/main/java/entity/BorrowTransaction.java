@@ -1,6 +1,7 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "borrow_transactions")
+@Data
 public class BorrowTransaction {
 
     @Id
@@ -22,16 +24,16 @@ public class BorrowTransaction {
 
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id" , nullable = false)
     private Member member;
 
 
     @ManyToOne
-    @JoinColumn(name = "issued_by")
+    @JoinColumn(name = "issued_by" , nullable = false)
     private User issuedBy;
 
     @ManyToOne
-    @JoinColumn(name = "returned_by")
+    @JoinColumn(name = "returned_by", nullable = false)
     private User returnedBy;
 
     @Column(name = "issue_date", nullable = false)

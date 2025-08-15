@@ -1,6 +1,10 @@
 package entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,9 +24,12 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is required")
     @Column(nullable = false)
     private String title;
 
+    @NotBlank(message = "ISBN is required")
+    @Pattern(regexp = "\\d{10}|\\d{13}", message = "ISBN must be 10 or 13 digits")
     @Column(unique = true, nullable = false)
     private String isbn;
 
@@ -42,19 +49,22 @@ public class Book {
     @Column(name = "cover_image_url")
     private String coverImageUrl;
 
+    @Min(1)
     @Column(name = "total_copies", nullable = false)
     private Integer totalCopies = 1;
 
+    @Min(0)
     @Column(name = "available_copies", nullable = false)
     private Integer availableCopies = 1;
 
+    @DecimalMin(value = "0.0", inclusive = true)
     private BigDecimal price;
 
     @Column(nullable = false)
     private boolean active = true;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at" ,  updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -62,7 +72,7 @@ public class Book {
     private LocalDateTime updatedAt;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -71,11 +81,19 @@ public class Book {
     private Set<Author> authors;
 
 
-    @ManyToOne
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_categories",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private Set<BorrowTransaction> borrowTransactions;
 
 }

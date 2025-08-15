@@ -74,7 +74,7 @@ public class BookServiceImpl implements IBookService {
         book.setTotalCopies(bookDetails.getTotalCopies());
         book.setPrice(bookDetails.getPrice());
         book.setAuthors(bookDetails.getAuthors());
-        book.setCategories(bookDetails.getCategories());
+        book.setCategory(bookDetails.getCategory());
         book.setPublisher(bookDetails.getPublisher());
 
         return bookRepository.save(book);

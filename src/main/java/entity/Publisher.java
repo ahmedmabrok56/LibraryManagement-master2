@@ -23,6 +23,11 @@ public class Publisher {
     private String country;
     private String website;
 
-    @OneToMany(mappedBy = "publisher")
+    @ManyToMany
+    @JoinTable(
+            name = "book_publisher",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "publisher_id")
+    )
     private Set<Book> books;
 }

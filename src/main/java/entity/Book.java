@@ -81,13 +81,8 @@ public class Book {
     private Set<Author> authors;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book_categories",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
